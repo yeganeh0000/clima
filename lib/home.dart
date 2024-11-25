@@ -18,7 +18,19 @@ class _HomeState extends State<Home> {
     permission = await geolocatorPlatform.checkPermission();
 
     if(permission == LocationPermission.denied){
-      print("permission denied");
+     // print("permission denied");
+      permission = await geolocatorPlatform.requestPermission();
+      if(permission != LocationPermission.denied){
+        if(permission == LocationPermission.deniedForever){
+          print("Permission permanently denied");
+        }else{
+
+          print("Permission graned");
+          getLocation();
+        }
+      }else{
+        print("User denied permission");
+      }
 
     }else{
 
