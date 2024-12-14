@@ -2,6 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../config/api_service.dart';
+import '../config/location_service.dart';
+import '../utils/constants.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -12,6 +16,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   GeolocatorPlatform geolocatorPlatform = GeolocatorPlatform.instance;
   LocationPermission ? permission;
+  double? latitude, longitude;
+
+
 
   Future<void> getPermission()async{
 
@@ -39,13 +46,21 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> getLocation()async{
-    const LocationSettings locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.low,
-      distanceFilter: 1000
-    );
+    LocationService location = LocationService();
+    await location.getCurrentLocation();
 
-    Position position = await Geolocator.getCurrentPosition(locationSettings: locationSettings);
-    print(position);
+    latitude = location.latitude;
+    longitude = location.longitude;
+    ApiService apiService = ApiService(
+        url:"http://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey");
+    var weatherData = await apiService.getData();
+    print(weatherData);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPermission();
   }
   @override
   Widget build(BuildContext context) {
