@@ -2,11 +2,11 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class ApiService {
+class NetworkHelper {
 
   String url;
 
-  ApiService({required this.url});
+  NetworkHelper({required this.url});
 
   Future getData() async {
     http.Response response = await http.get(Uri.parse(url));

@@ -2,7 +2,7 @@
 
 import 'package:geolocator/geolocator.dart';
 
-class LocationService {
+class Location  {
 
   double ? latitude;
   double ? longitude;
